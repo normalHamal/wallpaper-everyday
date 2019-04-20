@@ -21,19 +21,19 @@ $ wallpaper -h
 Usage: wallpaper [options] [command]
 
 Options:
-  -V, --version            output the version number
-  -h, --help               output usage information
-  -s, --scale              Scaling method: [auto, fill, fit, stretch, center](Default: auto) Only available on macOS
-  -b, --bing               use daily wallpaper from https://cn.bing.com to set up desktop wallpaper
-  -p, --pre                Switch the previous wallpaper
-  -n, --next               Switch the next wallpaper
-  -l, --latest             Switch the latest wallpaper
+  -V, --version output the version number
+  -h, --help    output usage information
+  -s, --scale   Scaling method: [auto, fill, fit, stretch, center](Default: auto) Only available on macOS
+  -b, --bing    use daily wallpaper from https://cn.bing.com to set up desktop wallpaper
+  -p, --pre     Switch the previous wallpaper
+  -n, --next    Switch the next wallpaper
+  -l, --latest  Switch the latest wallpaper
 
 Commands:
-  update [-s|--scale] <file>  Update desktop wallpaper with file path or remote url
-  get                      Get desktop wallpaper real path
-  random [-s|--scale][-b|--bing]         Random desktop wallpaper change
-  switch [-p|--pre][-n|--next][-l|--latest]         Switch cached wallpapers
+  update [-s|--scale] <file>                Update desktop wallpaper with file path or remote url
+  get                                       Get desktop wallpaper real path
+  random [-s|--scale][-b|--bing]            Random desktop wallpaper change
+  switch [-p|--pre][-n|--next][-l|--latest] Switch cached wallpapers
 ```
 
 
