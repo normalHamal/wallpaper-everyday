@@ -3,7 +3,7 @@
   "version": "1.0.3",
   "description": "Manage the desktop wallpaper",
   "scripts": {
-    "test": "ava test.js"
+    "test": "ava ci-test.js"
   },
   "bin": {
     "wallpaper": "wallpaper.js"

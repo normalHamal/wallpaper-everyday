@@ -1,6 +1,6 @@
 # wallpaper-everyday
 
-![travis-ci-status](https://travis-ci.com/normalHamal/wallpaper-everyday.svg?token=czeEFWLqsGpBh6jhTeTm&branch=master)![npm](https://img.shields.io/npm/v/wallpaper-everyday.svg)![npm](https://img.shields.io/npm/dm/wallpaper-everyday.svg)
+![travis-ci-status](https://travis-ci.com/normalHamal/wallpaper-everyday.svg?token=czeEFWLqsGpBh6jhTeTm&branch=master) ![npm](https://img.shields.io/npm/v/wallpaper-everyday.svg) ![npm](https://img.shields.io/npm/dm/wallpaper-everyday.svg)
 
 > Manage the desktop wallpaper and fetch random wallpaper
 
