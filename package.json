@@ -8,6 +8,7 @@
   "bin": {
     "wallpaper": "wallpaper.js"
   },
+  "files": ["wallpaper.js"],
   "engines": {
     "node": ">=8"
   },
