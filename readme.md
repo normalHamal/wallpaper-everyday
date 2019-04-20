@@ -1,4 +1,4 @@
-# wallpaper-everyday
+# wallpaper-everyday![travis-ci-status](https://travis-ci.com/normalHamal/wallpaper-everyday.svg?token=czeEFWLqsGpBh6jhTeTm&branch=master)
 
 > Manage the desktop wallpaper and fetch random wallpaper
 
