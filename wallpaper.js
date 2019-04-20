@@ -172,11 +172,17 @@ async function switchWallpaper({ pre, next, latest }) {
     );
   }
 
-  console.log(cacheFiles[index]);
-  fs.writeFile(_cache, JSON.stringify({
-    index,
-    cacheFiles
-  }, null, 2));
+  fs.writeFile(
+    _cache,
+    JSON.stringify(
+      {
+        index,
+        cacheFiles
+      },
+      null,
+      2
+    )
+  );
   // should i cached scale mode?
   await wallpaper.set(cacheFiles[index]);
 }
