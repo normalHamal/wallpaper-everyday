@@ -10,7 +10,7 @@ const got = require("got");
 const colors = require("colors");
 
 const { version } = require("./package.json");
-const randomApi = "http://wallpaper.normalhamal.online/api/random";
+const randomApi = "https://car.qvjunping.me/api/random";
 // file for caching used wallpapers
 const _cache = path.join(__dirname, "._cache.json");
 

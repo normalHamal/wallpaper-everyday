@@ -1,6 +1,6 @@
 {
   "name": "wallpaper-everyday",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Manage the desktop wallpaper",
   "scripts": {
     "test": "ava ci-test.js"
