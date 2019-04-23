@@ -5,24 +5,21 @@ const os = require("os");
 const fs = require("fs-extra");
 
 const _cache = path.join(__dirname, "._cache.json");
-let imagePathBeforeTest = "";
 const temp = "./test_images/test3.jpg";
+let cacheFileBeforeTest = null;
 
 test.before(async t => {
-  imagePathBeforeTest = await execa.stdout("./wallpaper.js", ["get"], {
-    cwd: __dirname
-  });
+  cacheFileBeforeTest = await fs.readFile(_cache, 'utf8');
 });
 
 test.beforeEach(async t => {
-  await execa.stdout("./wallpaper.js", ["update", temp], { cwd: __dirname });
-});
-
-test.afterEach(async t => {
-  await clear(path.resolve(temp));
-  await execa.stdout("./wallpaper.js", ["update", imagePathBeforeTest], {
+  await execa.stdout("./wallpaper.js", ["update", temp], {
     cwd: __dirname
   });
+});
+
+test.after(async t => {
+  await fs.writeFile(_cache, cacheFileBeforeTest);
 });
 
 test.serial("get", async t => {

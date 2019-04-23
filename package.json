@@ -9,7 +9,7 @@
     "wallpaper": "wallpaper.js"
   },
   "files": [
-    "wallpaper.js"
+    "wallpaper.js", "._cache.json"
   ],
   "engines": {
     "node": ">=8"

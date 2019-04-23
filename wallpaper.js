@@ -11,8 +11,30 @@ const colors = require("colors");
 
 const { version } = require("./package.json");
 const randomApi = "https://car.qvjunping.me/api/random";
+const request = got.extend({
+  retry: 5
+});
 // file for caching used wallpapers
 const _cache = path.join(__dirname, "._cache.json");
+
+try {
+  // init cache file
+  if (!fs.existsSync(_cache)) {
+    fs.writeFileSync(
+      _cache,
+      JSON.stringify(
+        {
+          index: 0,
+          cacheFiles: []
+        },
+        null,
+        2
+      )
+    );
+  }
+} catch (error) {
+  handleError(error);
+}
 
 program.version(version);
 
@@ -29,7 +51,7 @@ program
       // Get a random temporary file and copy to it
       const temp = tempfile(path.extname(file));
 
-      got
+      request
         .stream(file)
         .on("error", err => {
           console.log(
@@ -45,6 +67,8 @@ program
     } else {
       file = path.resolve(file);
 
+      // why here check file whether exist ?
+      // Prevents invalid file paths from being written to the cache file
       if (!fs.existsSync(file)) {
         return console.log(
           colors.red(
@@ -53,11 +77,7 @@ program
         );
       }
 
-      try {
-        await setWallpaper(file, scale);
-      } catch (error) {
-        console.log(colors.red(error));
-      }
+      await setWallpaper(file, scale);
     }
   });
 
@@ -83,18 +103,16 @@ program
     const url = (bing && `${randomApi}?from=bing`) || randomApi;
     const temp = tempfile(path.extname(url));
 
-    got
+    request
       .stream(url)
       .on("error", err => {
-        console.log(colors.red(`failed: fetch random source failed`));
+        console.log(
+          colors.red(`failed: fetch random source failed, retry it!`)
+        );
       })
       .pipe(fs.createWriteStream(temp))
       .on("finish", async () => {
-        try {
-          await setWallpaper(temp, scale);
-        } catch (error) {
-          console.log(colors.red(error));
-        }
+        await setWallpaper(temp, scale);
       });
   });
 
@@ -108,7 +126,7 @@ program
     try {
       await switchWallpaper({ pre, next, latest });
     } catch (error) {
-      console.log(colors.red(error));
+      handleError(error);
     }
   });
 
@@ -146,15 +164,32 @@ async function cacheUsedFile(path) {
 /**
  * cache wallpaper path and set it up
  *
+ * @private
  * @param {string} path
  * @param {string} scale auto|fill|fit|stretch|center
  */
 async function setWallpaper(path, scale) {
-  await cacheUsedFile(path);
-  await wallpaper.set(path, scale);
+  try {
+    await cacheUsedFile(path);
+    await wallpaper.set(path, scale);
+  } catch (error) {
+    handleError(error);
+  }
 }
 
+/**
+ * switch wallpaper
+ *
+ * @param {Object} { pre, next, latest }
+ * @returns
+ */
 async function switchWallpaper({ pre, next, latest }) {
+  if (!pre && !next && !latest) {
+    return console.log(
+      colors.yellow(`please type "wallpaper switch -h" to see how to use`)
+    );
+  }
+
   let { cacheFiles = [], index } = JSON.parse(
     await fs.readFile(_cache, "utf8")
   );
@@ -185,4 +220,8 @@ async function switchWallpaper({ pre, next, latest }) {
   );
   // should i cached scale mode?
   await wallpaper.set(cacheFiles[index]);
+}
+
+function handleError(error) {
+  console.log(colors.red(error.message));
 }
