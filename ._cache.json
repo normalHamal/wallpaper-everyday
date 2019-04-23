@@ -1,4 +1,13 @@
 {
-  "index": 0,
-  "cacheFiles": []
+  "index": 1,
+  "cacheFiles": [
+    {
+      "path": "C:\\Users\\John\\AppData\\Local\\Temp\\e53aa649-290b-425b-9ea1-95255110ad39.jpg&pid=hp",
+      "url": "https://cn.bing.com//th?id=OHR.RainforestMoss_ZH-CN2878951870_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp"
+    },
+    {
+      "path": "C:\\Users\\John\\AppData\\Local\\Temp\\c5c513c2-da54-4e7b-8d74-bed91fce0921.jpg",
+      "url": "https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-729638.jpg"
+    }
+  ]
 }
