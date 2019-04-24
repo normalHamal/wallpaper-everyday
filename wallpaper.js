@@ -13,12 +13,14 @@ const {
   logError,
   logSuccess
 } = require("./lib/util");
+const Unsplash = require("./lib/unsplash");
 const Bing = require("./lib/bing");
 const QJP = require("./lib/qvjunping");
 
 const { version } = require("./package.json");
 const bingApi = new Bing();
 const qjpApi = new QJP();
+const unsplashApi = new Unsplash();
 
 program.version(version);
 
@@ -64,7 +66,9 @@ program
   .command("get")
   .description("Get desktop wallpaper real path")
   .action(async () => {
-    logSuccess(`Your current desktop wallpaper is from: ${await wallpaper.get()}`);
+    logSuccess(
+      `Your current desktop wallpaper is from: ${await wallpaper.get()}`
+    );
   });
 
 program
@@ -78,10 +82,12 @@ program
     let url = "";
     from = from.toUpperCase();
 
-    if (from === 'QJP') {
+    if (from === "QJP") {
       url = await qjpApi.getRandom();
+    } else if (from === "UNSPLASH") {
+      url = await unsplashApi.getRandom();
     } else {
-      return logError(`unknown argument '${from}'. See 'wallpaper random -h'`)
+      return logError(`unknown argument '${from}'. See 'wallpaper random -h'`);
     }
 
     const temp = tempfile(path.extname(url));
@@ -100,7 +106,7 @@ program
 
 program
   .command("daily <from>")
-  .description("Daily wallpaper")
+  .description("Daily wallpaper. from: [bing, unsplash]")
   .option(
     "-s --scale [mode]",
     "Scaling method: [auto, fill, fit, stretch, center](Default: auto) Only available on macOS"
@@ -109,10 +115,12 @@ program
     let url = "";
     from = from.toUpperCase();
 
-    if (from === 'BING') {
+    if (from === "BING") {
       url = await bingApi.getDaily();
+    } else if (from === "UNSPLASH") {
+      url = await unsplashApi.getDaily();
     } else {
-      return logError(`unknown argument ${from}. See 'wallpaper daily -h'`)
+      return logError(`unknown argument ${from}. See 'wallpaper daily -h'`);
     }
 
     const temp = tempfile(path.extname(url));
@@ -139,12 +147,12 @@ program
     await switchWallpaper({ pre, next, latest });
   });
 
-program.on('--help', function(){
-  console.log('')
-  console.log('Examples:');
-  console.log('  $ wallpaper update https://examples.com/wallpaper.jpg');
-  console.log('  $ wallpaper random QJP');
-  console.log('  $ wallpaper daily bing');
+program.on("--help", function() {
+  console.log("");
+  console.log("Examples:");
+  console.log("  $ wallpaper update https://examples.com/wallpaper.jpg");
+  console.log("  $ wallpaper random QJP");
+  console.log("  $ wallpaper daily bing");
 });
 
 program.parse(process.argv);

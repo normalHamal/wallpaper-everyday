@@ -8,10 +8,13 @@ const _cache = path.join(__dirname, "._cache.json");
 const temp = "./test_images/test3.jpg";
 
 test.before(async t => {
-  await fs.writeFile(_cache, JSON.stringify({
-    index: 0,
-    cacheFiles: []
-  }));
+  await fs.writeFile(
+    _cache,
+    JSON.stringify({
+      index: 0,
+      cacheFiles: []
+    })
+  );
 });
 
 test.beforeEach(async t => {
@@ -21,10 +24,13 @@ test.beforeEach(async t => {
 });
 
 test.after(async t => {
-  await fs.writeFile(_cache, JSON.stringify({
-    index: 0,
-    cacheFiles: []
-  }));
+  await fs.writeFile(
+    _cache,
+    JSON.stringify({
+      index: 0,
+      cacheFiles: []
+    })
+  );
 });
 
 test.serial("get", async t => {
@@ -51,8 +57,6 @@ test.serial("update", async t => {
     updateImagePath.includes(path.resolve(tempImagePath)) &&
       !updateImagePath.includes(orignalImagePath)
   );
-
-  await clear(updateImagePath);
 });
 
 test.serial("random", async t => {
@@ -69,8 +73,6 @@ test.serial("random", async t => {
     randomImagePath.includes(os.tmpdir()) &&
       !randomImagePath.includes(orignalImagePath)
   );
-
-  await clear(randomImagePath);
 });
 
 test.serial("switch", async t => {
@@ -109,29 +111,4 @@ test.serial("switch", async t => {
     await execa.stdout("./wallpaper.js", ["get"], { cwd: __dirname }),
     nextImagePath
   );
-
-  await clear(path.resolve(testImagsPaths[0]));
-  await clear(path.resolve(testImagsPaths[1]));
 });
-
-async function clear(file) {
-  let { cacheFiles = [], index } = JSON.parse(
-    await fs.readFile(_cache, "utf8")
-  );
-
-  if (!cacheFiles.length) {
-    return await fs.unlink(_cache);
-  }
-
-  await fs.writeFile(
-    _cache,
-    JSON.stringify(
-      {
-        index,
-        cacheFiles: cacheFiles.filter(i => !file.includes(i))
-      },
-      null,
-      2
-    )
-  );
-}
