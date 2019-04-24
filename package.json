@@ -3,7 +3,8 @@
   "version": "1.1.0",
   "description": "Manage the desktop wallpaper",
   "scripts": {
-    "test": "ava test.js"
+    "test": "ava test.js",
+    "prepublish": "prettier --write ./**/*.js"
   },
   "bin": {
     "wallpaper": "wallpaper.js"
@@ -37,6 +38,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "ava": "^1.4.1"
+    "ava": "^1.4.1",
+    "prettier": "^1.17.0"
   }
 }

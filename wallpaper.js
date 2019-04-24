@@ -7,7 +7,12 @@ const path = require("path");
 const isUrl = require("is-url-superb");
 const tempfile = require("tempfile");
 const got = require("got");
-const { setWallpaper, switchWallpaper, logError, logSuccess } = require("./lib/util");
+const {
+  setWallpaper,
+  switchWallpaper,
+  logError,
+  logSuccess
+} = require("./lib/util");
 const Bing = require("./lib/bing");
 const QJP = require("./lib/qvjunping");
 
@@ -33,7 +38,7 @@ program
       got
         .stream(file)
         .on("error", err => {
-          logError(`failed: ${colors.red.underline(file)} is not a valid url`);
+          logError(`'${file}' is not a valid url`);
         })
         .pipe(fs.createWriteStream(temp))
         .on("finish", async () => {
@@ -46,44 +51,37 @@ program
       // Prevents invalid file paths from being written to the cache file
       if (!fs.existsSync(file)) {
         return console.log(
-          logError(`failed: ${colors.red.underline(file)} is not a valid path`)
+          logError(`${colors.red.underline(file)} is not a valid path`)
         );
       }
 
       await setWallpaper(file, scale);
     }
-    logSuccess('Wallpaper update Successful');
+    logSuccess("Wallpaper update Successful");
   });
 
 program
   .command("get")
   .description("Get desktop wallpaper real path")
   .action(async () => {
-    logSuccess(await wallpaper.get());
+    logSuccess(`Your current desktop wallpaper is from: ${await wallpaper.get()}`);
   });
 
 program
-  .command("random")
-  .description("Random desktop wallpaper change")
+  .command("random <from>")
+  .description("Random desktop wallpaper change. from: [QJP]")
   .option(
     "-s --scale [mode]",
     "Scaling method: [auto, fill, fit, stretch, center](Default: auto) Only available on macOS"
   )
-  .option(
-    "-b --bing",
-    "use daily wallpaper from https://cn.bing.com to set up desktop wallpaper"
-  )
-  .action(async ({ scale, bing }) => {
+  .action(async (from, { scale }) => {
     let url = "";
+    from = from.toUpperCase();
 
-    if (bing) {
-      url = await bingApi.getDaily();
-    } else {
+    if (from === 'QJP') {
       url = await qjpApi.getRandom();
-    }
-
-    if (!url) {
-      return;
+    } else {
+      return logError(`unknown argument '${from}'. See 'wallpaper random -h'`)
     }
 
     const temp = tempfile(path.extname(url));
@@ -91,14 +89,43 @@ program
     got
       .stream(url)
       .on("error", err => {
-        console.log(
-          colors.red(`failed: fetch random source failed, retry it!`)
-        );
+        logError(`fetch random source failed, retry it!`);
       })
       .pipe(fs.createWriteStream(temp))
       .on("finish", async () => {
         await setWallpaper(temp, scale, url);
-        logSuccess('Wallpaper random Successful');
+        logSuccess("Wallpaper random Successful");
+      });
+  });
+
+program
+  .command("daily <from>")
+  .description("Daily wallpaper")
+  .option(
+    "-s --scale [mode]",
+    "Scaling method: [auto, fill, fit, stretch, center](Default: auto) Only available on macOS"
+  )
+  .action(async (from, { scale }) => {
+    let url = "";
+    from = from.toUpperCase();
+
+    if (from === 'BING') {
+      url = await bingApi.getDaily();
+    } else {
+      return logError(`unknown argument ${from}. See 'wallpaper daily -h'`)
+    }
+
+    const temp = tempfile(path.extname(url));
+
+    got
+      .stream(url)
+      .on("error", err => {
+        logError(`fetch daily source failed, retry it!`);
+      })
+      .pipe(fs.createWriteStream(temp))
+      .on("finish", async () => {
+        await setWallpaper(temp, scale, url);
+        logSuccess("Setup daily wallpaper successfully");
       });
   });
 
@@ -111,5 +138,13 @@ program
   .action(async ({ pre, next, latest }) => {
     await switchWallpaper({ pre, next, latest });
   });
+
+program.on('--help', function(){
+  console.log('')
+  console.log('Examples:');
+  console.log('  $ wallpaper update https://examples.com/wallpaper.jpg');
+  console.log('  $ wallpaper random QJP');
+  console.log('  $ wallpaper daily bing');
+});
 
 program.parse(process.argv);

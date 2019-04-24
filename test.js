@@ -6,10 +6,12 @@ const fs = require("fs-extra");
 
 const _cache = path.join(__dirname, "._cache.json");
 const temp = "./test_images/test3.jpg";
-let cacheFileBeforeTest = null;
 
 test.before(async t => {
-  cacheFileBeforeTest = await fs.readFile(_cache, 'utf8');
+  await fs.writeFile(_cache, JSON.stringify({
+    index: 0,
+    cacheFiles: []
+  }));
 });
 
 test.beforeEach(async t => {
@@ -19,7 +21,10 @@ test.beforeEach(async t => {
 });
 
 test.after(async t => {
-  await fs.writeFile(_cache, cacheFileBeforeTest);
+  await fs.writeFile(_cache, JSON.stringify({
+    index: 0,
+    cacheFiles: []
+  }));
 });
 
 test.serial("get", async t => {
@@ -55,7 +60,7 @@ test.serial("random", async t => {
     cwd: __dirname
   });
 
-  await execa.stdout("./wallpaper.js", ["random", "-b"], { cwd: __dirname });
+  await execa.stdout("./wallpaper.js", ["random", "QJP"], { cwd: __dirname });
 
   const randomImagePath = await execa.stdout("./wallpaper.js", ["get"], {
     cwd: __dirname
