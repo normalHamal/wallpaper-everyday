@@ -4,7 +4,7 @@ const path = require("path");
 const os = require("os");
 const fs = require("fs-extra");
 
-const _cache = path.join(__dirname, "._cache.json");
+const _cache = path.join(__dirname, ".test_cache.json");
 const temp = "./test_images/test3.jpg";
 
 test.before(async t => {
@@ -24,13 +24,7 @@ test.beforeEach(async t => {
 });
 
 test.after(async t => {
-  await fs.writeFile(
-    _cache,
-    JSON.stringify({
-      index: 0,
-      cacheFiles: []
-    })
-  );
+  await fs.unlink(_cache);
 });
 
 test.serial("get", async t => {
@@ -59,12 +53,44 @@ test.serial("update", async t => {
   );
 });
 
-test.serial("random", async t => {
+test.serial("daily:bing", async t => {
+  const orignalImagePath = await execa.stdout("./wallpaper.js", ["get"], {
+    cwd: __dirname
+  });
+
+  await execa.stdout("./wallpaper.js", ["daily", "bing"], { cwd: __dirname });
+
+  const randomImagePath = await execa.stdout("./wallpaper.js", ["get"], {
+    cwd: __dirname
+  });
+  t.true(
+    randomImagePath.includes(os.tmpdir()) &&
+      !randomImagePath.includes(orignalImagePath)
+  );
+});
+
+test.serial("random:QJP", async t => {
   const orignalImagePath = await execa.stdout("./wallpaper.js", ["get"], {
     cwd: __dirname
   });
 
   await execa.stdout("./wallpaper.js", ["random", "QJP"], { cwd: __dirname });
+
+  const randomImagePath = await execa.stdout("./wallpaper.js", ["get"], {
+    cwd: __dirname
+  });
+  t.true(
+    randomImagePath.includes(os.tmpdir()) &&
+      !randomImagePath.includes(orignalImagePath)
+  );
+});
+
+test.serial("random:unsplash", async t => {
+  const orignalImagePath = await execa.stdout("./wallpaper.js", ["get"], {
+    cwd: __dirname
+  });
+
+  await execa.stdout("./wallpaper.js", ["random", "unsplash"], { cwd: __dirname });
 
   const randomImagePath = await execa.stdout("./wallpaper.js", ["get"], {
     cwd: __dirname

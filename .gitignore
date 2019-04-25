@@ -2,3 +2,4 @@ node_modules
 yarn.lock
 .vscode
 .dev_cache.json
+.test_cache.json

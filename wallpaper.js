@@ -11,7 +11,8 @@ const {
   setWallpaper,
   switchWallpaper,
   logError,
-  logSuccess
+  logSuccess,
+  reportDownload
 } = require("./lib/util");
 const Unsplash = require("./lib/unsplash");
 const Bing = require("./lib/bing");
@@ -42,9 +43,13 @@ program
         .on("error", err => {
           logError(`'${file}' is not a valid url`);
         })
+        .on('downloadProgress', progress => {
+          reportDownload({ ...progress, url: file })
+        })
         .pipe(fs.createWriteStream(temp))
         .on("finish", async () => {
           await setWallpaper(temp, scale, file);
+          logSuccess("Wallpaper update Successful");
         });
     } else {
       file = path.resolve(file);
@@ -58,8 +63,8 @@ program
       }
 
       await setWallpaper(file, scale);
+      logSuccess("Wallpaper update Successful");
     }
-    logSuccess("Wallpaper update Successful");
   });
 
 program
@@ -97,6 +102,9 @@ program
       .on("error", err => {
         logError(`fetch random source failed, retry it!`);
       })
+      .on('downloadProgress', progress => {
+        reportDownload({ ...progress, url })
+      })
       .pipe(fs.createWriteStream(temp))
       .on("finish", async () => {
         await setWallpaper(temp, scale, url);
@@ -130,6 +138,9 @@ program
       .on("error", err => {
         logError(`fetch daily source failed, retry it!`);
       })
+      .on('downloadProgress', progress => {
+        reportDownload({ ...progress, url })
+      })
       .pipe(fs.createWriteStream(temp))
       .on("finish", async () => {
         await setWallpaper(temp, scale, url);
@@ -153,6 +164,11 @@ program.on("--help", function() {
   console.log("  $ wallpaper update https://examples.com/wallpaper.jpg");
   console.log("  $ wallpaper random QJP");
   console.log("  $ wallpaper daily bing");
+});
+
+program.on('command:*', function () {
+  logError(`Invalid command: ${program.args.join(' ')}\nSee --help for a list of available commands.`);
+  process.exit(1);
 });
 
 program.parse(process.argv);
