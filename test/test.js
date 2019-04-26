@@ -35,7 +35,7 @@ test.serial("get", async t => {
 });
 
 test.serial("update", async t => {
-  const tempImagePath = "./test_images/test1.jpg";
+  const tempImagePath = path.join(__dirname, "./test_images/test1.jpg");
   const orignalImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
     cwd: __dirname
   });
@@ -59,6 +59,24 @@ test.serial("daily:bing", async t => {
   });
 
   await execa.stdout("../bin/wallpaper.js", ["daily", "bing"], {
+    cwd: __dirname
+  });
+
+  const randomImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+    cwd: __dirname
+  });
+  t.true(
+    randomImagePath.includes(os.tmpdir()) &&
+      !randomImagePath.includes(orignalImagePath)
+  );
+});
+
+test.serial("daily:unsplash", async t => {
+  const orignalImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+    cwd: __dirname
+  });
+
+  await execa.stdout("../bin/wallpaper.js", ["daily", "unsplash"], {
     cwd: __dirname
   });
 
@@ -107,11 +125,29 @@ test.serial("random:unsplash", async t => {
   );
 });
 
+test.serial("random:bing", async t => {
+  const orignalImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+    cwd: __dirname
+  });
+
+  await execa.stdout("../bin/wallpaper.js", ["random", "bing"], {
+    cwd: __dirname
+  });
+
+  const randomImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+    cwd: __dirname
+  });
+  t.true(
+    randomImagePath.includes(os.tmpdir()) &&
+      !randomImagePath.includes(orignalImagePath)
+  );
+});
+
 test.serial("switch", async t => {
   const orignalImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
     cwd: __dirname
   });
-  const testImagsPaths = ["./test_images/test1.jpg", "./test_images/test2.jpg"];
+  const testImagsPaths = [path.join(__dirname, "./test_images/test1.jpg"), path.join(__dirname, "./test_images/test2.jpg")];
 
   await execa.stdout("../bin/wallpaper.js", ["update", testImagsPaths[0]], {
     cwd: __dirname

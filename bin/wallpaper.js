@@ -78,7 +78,7 @@ program
 
 program
   .command("random <from>")
-  .description("Random desktop wallpaper change. from: [QJP, unsplash]")
+  .description("Random desktop wallpaper change. from: [QJP, unsplash, bing]")
   .option(
     "-s --scale [mode]",
     "Scaling method: [auto, fill, fit, stretch, center](Default: auto) Only available on macOS"
