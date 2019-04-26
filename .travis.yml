@@ -4,4 +4,4 @@ language: node_js
 node_js:
   - '8'
 before_install:
-  - chmod +x .bin/wallpaper.js
+  - chmod +x bin/wallpaper.js
