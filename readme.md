@@ -9,14 +9,14 @@ Works on macOS, Linux, and Windows.
 ![](http://static.qvjunping.me/8c37c72f-8291-4462-acb4-9c2d541a07f2.gif)
 
 
-## Install ☟
+## 👩🏻‍💻Install 
 
 ```bash
 $ npm install --global wallpaper-everyday
 ```
 
 
-## ✍Usage
+## 👩🏾‍🏫Usage
 
 ```bash
 $ wallpaper -h
@@ -40,6 +40,6 @@ Examples:
 ```
 
 
-## ❤Related
+## 👏🏽Related
 
 - [wallpaper](https://github.com/sindresorhus/wallpaper) - API for this module

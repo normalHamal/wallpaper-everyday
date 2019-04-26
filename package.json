@@ -3,15 +3,16 @@
   "version": "2.0.1",
   "description": "Manage the desktop wallpaper",
   "scripts": {
-    "test": "ava test.js",
+    "test": "ava",
     "prepublish": "prettier --write ./**/*.js"
   },
   "bin": {
-    "wallpaper": "wallpaper.js"
+    "wallpaper": "bin/wallpaper.js"
   },
   "files": [
-    "wallpaper.js",
-    "._cache.json"
+    "bin",
+    "._cache.json",
+    "lib"
   ],
   "engines": {
     "node": ">=8"

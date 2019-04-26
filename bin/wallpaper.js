@@ -13,12 +13,12 @@ const {
   logError,
   logSuccess,
   reportDownload
-} = require("./lib/util");
-const Unsplash = require("./lib/unsplash");
-const Bing = require("./lib/bing");
-const QJP = require("./lib/qvjunping");
+} = require("../lib/util");
+const Unsplash = require("../lib/unsplash");
+const Bing = require("../lib/bing");
+const QJP = require("../lib/qvjunping");
 
-const { version } = require("./package.json");
+const { version } = require("../package.json");
 const bingApi = new Bing();
 const qjpApi = new QJP();
 const unsplashApi = new Unsplash();
@@ -43,8 +43,8 @@ program
         .on("error", err => {
           logError(`'${file}' is not a valid url`);
         })
-        .on('downloadProgress', progress => {
-          reportDownload({ ...progress, url: file })
+        .on("downloadProgress", progress => {
+          reportDownload({ ...progress, url: file });
         })
         .pipe(fs.createWriteStream(temp))
         .on("finish", async () => {
@@ -78,7 +78,7 @@ program
 
 program
   .command("random <from>")
-  .description("Random desktop wallpaper change. from: [QJP]")
+  .description("Random desktop wallpaper change. from: [QJP, unsplash]")
   .option(
     "-s --scale [mode]",
     "Scaling method: [auto, fill, fit, stretch, center](Default: auto) Only available on macOS"
@@ -102,8 +102,8 @@ program
       .on("error", err => {
         logError(`fetch random source failed, retry it!`);
       })
-      .on('downloadProgress', progress => {
-        reportDownload({ ...progress, url })
+      .on("downloadProgress", progress => {
+        reportDownload({ ...progress, url });
       })
       .pipe(fs.createWriteStream(temp))
       .on("finish", async () => {
@@ -138,8 +138,8 @@ program
       .on("error", err => {
         logError(`fetch daily source failed, retry it!`);
       })
-      .on('downloadProgress', progress => {
-        reportDownload({ ...progress, url })
+      .on("downloadProgress", progress => {
+        reportDownload({ ...progress, url });
       })
       .pipe(fs.createWriteStream(temp))
       .on("finish", async () => {
@@ -166,9 +166,20 @@ program.on("--help", function() {
   console.log("  $ wallpaper daily bing");
 });
 
-program.on('command:*', function () {
-  logError(`Invalid command: ${program.args.join(' ')}\nSee --help for a list of available commands.`);
+program.on("command:*", function() {
+  logError(
+    `Invalid command: ${program.args.join(
+      " "
+    )}\nSee --help for a list of available commands.`
+  );
   process.exit(1);
 });
+
+Object.getPrototypeOf(program).constructor.prototype.unknownOption = flags => {
+  logError(
+    `unknown option: ${flags}\nSee --help for a list of available commands.`
+  );
+  process.exit(1);
+};
 
 program.parse(process.argv);
