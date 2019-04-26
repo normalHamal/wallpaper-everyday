@@ -147,7 +147,10 @@ test.serial("switch", async t => {
   const orignalImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
     cwd: __dirname
   });
-  const testImagsPaths = [path.join(__dirname, "./test_images/test1.jpg"), path.join(__dirname, "./test_images/test2.jpg")];
+  const testImagsPaths = [
+    path.join(__dirname, "./test_images/test1.jpg"),
+    path.join(__dirname, "./test_images/test2.jpg")
+  ];
 
   await execa.stdout("../bin/wallpaper.js", ["update", testImagsPaths[0]], {
     cwd: __dirname

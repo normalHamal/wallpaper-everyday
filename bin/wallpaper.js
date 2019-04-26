@@ -91,7 +91,7 @@ program
       url = await qjpApi.getRandom();
     } else if (from === "UNSPLASH") {
       url = await unsplashApi.getRandom();
-    } else if (from === 'BING') {
+    } else if (from === "BING") {
       url = await bingApi.getRandom();
     } else {
       return logError(`unknown argument '${from}'. See 'wallpaper random -h'`);
