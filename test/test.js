@@ -1,5 +1,6 @@
 const test = require("ava");
 const execa = require("execa");
+const os = require("os");
 const path = require("path");
 const fs = require("fs-extra");
 
