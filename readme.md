@@ -6,7 +6,7 @@
 
 Works on macOS, Linux, and Windows.
 
-![](./intro.gif)
+![](http://static.qvjunping.me/intro.gif)
 
 
 ## 👩🏻‍💻Install

@@ -94,7 +94,7 @@ program
       url = await unsplashApi.getRandom();
     } else if (from === "BING") {
       url = await bingApi.getRandom();
-    } else if(from === "NETBIAN") {
+    } else if (from === "NETBIAN") {
       url = await netbianApi.getRandom();
     } else {
       return logError(`unknown argument '${from}'. See 'wallpaper random -h'`);
