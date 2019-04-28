@@ -97,6 +97,10 @@ program
       return logError(`unknown argument '${from}'. See 'wallpaper random -h'`);
     }
 
+    if (!isUrl(url)) {
+      return logError("fetch random source failed, retry it!");
+    }
+
     const temp = tempfile(path.extname(url));
 
     got
@@ -131,6 +135,10 @@ program
       url = await unsplashApi.getDaily();
     } else {
       return logError(`unknown argument ${from}. See 'wallpaper daily -h'`);
+    }
+
+    if (!isUrl(url)) {
+      return logError("fetch random source failed, retry it!");
     }
 
     const temp = tempfile(path.extname(url));
