@@ -31,6 +31,7 @@ Commands:
   get                      Get desktop wallpaper real path
   random [options] <from>  Random desktop wallpaper change. from: [QJP, unsplash, bing]
   daily [options] <from>   Daily wallpaper. from: [bing, unsplash]
+  clear                    Clear all cached wallpaper.
   switch [options]         Switch cached wallpapers
 
 Examples:

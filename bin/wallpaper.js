@@ -12,7 +12,8 @@ const {
   switchWallpaper,
   logError,
   logSuccess,
-  reportDownload
+  reportDownload,
+  clearWallpapers
 } = require("../lib/util");
 const Unsplash = require("../lib/unsplash");
 const Bing = require("../lib/bing");
@@ -49,7 +50,6 @@ program
         .pipe(fs.createWriteStream(temp))
         .on("finish", async () => {
           await setWallpaper(temp, scale, file);
-          logSuccess("Wallpaper update Successful");
         });
     } else {
       file = path.resolve(file);
@@ -63,7 +63,6 @@ program
       }
 
       await setWallpaper(file, scale);
-      logSuccess("Wallpaper update Successful");
     }
   });
 
@@ -114,7 +113,6 @@ program
       .pipe(fs.createWriteStream(temp))
       .on("finish", async () => {
         await setWallpaper(temp, scale, url);
-        logSuccess("Wallpaper random Successful");
       });
   });
 
@@ -154,8 +152,14 @@ program
       .pipe(fs.createWriteStream(temp))
       .on("finish", async () => {
         await setWallpaper(temp, scale, url);
-        logSuccess("Setup daily wallpaper successfully");
       });
+  });
+
+  program
+  .command("clear")
+  .description("Clear all cached wallpaper.")
+  .action(async () => {
+    await clearWallpapers();
   });
 
 program
