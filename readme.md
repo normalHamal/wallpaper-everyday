@@ -6,7 +6,7 @@
 
 Works on macOS, Linux, and Windows.
 
-![](http://static.qvjunping.me/8c37c72f-8291-4462-acb4-9c2d541a07f2.gif)
+![](./intro.gif)
 
 
 ## 👩🏻‍💻Install
@@ -30,7 +30,7 @@ Commands:
   update [options] <file>  Update desktop wallpaper with file path or remote url
   get                      Get desktop wallpaper real path
   random [options] <from>  Random desktop wallpaper change. from: [QJP, unsplash, bing]
-  daily [options] <from>   Daily wallpaper. from: [bing, unsplash]
+  daily [options] <from>   Daily wallpaper. from: [bing, unsplash, netbian]
   clear                    Clear all cached wallpaper.
   switch [options]         Switch cached wallpapers
 

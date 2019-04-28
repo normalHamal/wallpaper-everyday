@@ -18,11 +18,13 @@ const {
 const Unsplash = require("../lib/unsplash");
 const Bing = require("../lib/bing");
 const QJP = require("../lib/qvjunping");
+const NetBian = require("../lib/netbian");
 
 const { version } = require("../package.json");
 const bingApi = new Bing();
 const qjpApi = new QJP();
 const unsplashApi = new Unsplash();
+const netbianApi = new NetBian();
 
 program.version(version);
 
@@ -92,6 +94,8 @@ program
       url = await unsplashApi.getRandom();
     } else if (from === "BING") {
       url = await bingApi.getRandom();
+    } else if(from === "NETBIAN") {
+      url = await netbianApi.getRandom();
     } else {
       return logError(`unknown argument '${from}'. See 'wallpaper random -h'`);
     }
@@ -118,7 +122,7 @@ program
 
 program
   .command("daily <from>")
-  .description("Daily wallpaper. from: [bing, unsplash]")
+  .description("Daily wallpaper. from: [bing, unsplash, netbian]")
   .option(
     "-s --scale [mode]",
     "Scaling method: [auto, fill, fit, stretch, center](Default: auto) Only available on macOS"
@@ -155,7 +159,7 @@ program
       });
   });
 
-  program
+program
   .command("clear")
   .description("Clear all cached wallpaper.")
   .action(async () => {
