@@ -4,14 +4,13 @@
   "description": "Manage the desktop wallpaper",
   "scripts": {
     "test": "ava",
-    "prepublish": "prettier --write ./**/*.js"
+    "prepublishOnly": "prettier --write ./**/*.js"
   },
   "bin": {
     "wallpaper": "bin/wallpaper.js"
   },
   "files": [
     "bin",
-    "._cache.json",
     "lib"
   ],
   "engines": {
@@ -21,7 +20,7 @@
     "type": "git",
     "url": "git@github.com:normalHamal/wallpaper-everyday"
   },
-  "main": "wallpaper.js",
+  "main": "bin/wallpaper.js",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "colors": "^1.3.3",
@@ -39,7 +38,8 @@
     "wallpaper",
     "bing",
     "random",
-    "unsplash"
+    "unsplash",
+    "netbian"
   ],
   "license": "MIT",
   "devDependencies": {

@@ -4,17 +4,12 @@ const os = require("os");
 const path = require("path");
 const fs = require("fs-extra");
 
-const _cache = path.join(__dirname, ".test_cache.json");
+const _cache = path.join(process.env.HOME, ".wallpaper", ".cache.json");
+let cacheBefore = "";
 const temp = path.join(__dirname, "./test_images/test3.jpg");
 
 test.before(async t => {
-  await fs.writeFile(
-    _cache,
-    JSON.stringify({
-      index: 0,
-      cacheFiles: []
-    })
-  );
+  cacheBefore = await fs.readFile(_cache, "utf8");
 });
 
 test.beforeEach(async t => {
@@ -24,7 +19,7 @@ test.beforeEach(async t => {
 });
 
 test.after(async t => {
-  await fs.unlink(_cache);
+  await fs.writeFile(cacheBefore);
 });
 
 test.serial("get", async t => {
@@ -131,6 +126,24 @@ test.serial("random:bing", async t => {
   });
 
   await execa.stdout("../bin/wallpaper.js", ["random", "bing"], {
+    cwd: __dirname
+  });
+
+  const randomImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+    cwd: __dirname
+  });
+  t.true(
+    randomImagePath.includes(os.tmpdir()) &&
+      !randomImagePath.includes(orignalImagePath)
+  );
+});
+
+test.serial("random:netbian", async t => {
+  const orignalImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+    cwd: __dirname
+  });
+
+  await execa.stdout("../bin/wallpaper.js", ["random", "netbian"], {
     cwd: __dirname
   });
 

@@ -5,14 +5,11 @@ const wallpaper = require("wallpaper");
 const fs = require("fs-extra");
 const path = require("path");
 const isUrl = require("is-url-superb");
-const tempfile = require("tempfile");
-const got = require("got");
 const {
   setWallpaper,
   switchWallpaper,
   logError,
   logSuccess,
-  reportDownload,
   clearWallpapers
 } = require("../lib/util");
 const Unsplash = require("../lib/unsplash");
@@ -37,22 +34,7 @@ program
   )
   .action(async (file, { scale }) => {
     if (isUrl(file)) {
-      // if a url
-      // Get a random temporary file and copy to it
-      const temp = tempfile(path.extname(file));
-
-      got
-        .stream(file)
-        .on("error", err => {
-          logError(`'${file}' is not a valid url`);
-        })
-        .on("downloadProgress", progress => {
-          reportDownload({ ...progress, url: file });
-        })
-        .pipe(fs.createWriteStream(temp))
-        .on("finish", async () => {
-          await setWallpaper(temp, scale, file);
-        });
+      await setWallpaper(file, scale);
     } else {
       file = path.resolve(file);
 
@@ -104,20 +86,7 @@ program
       return logError("fetch random source failed, retry it!");
     }
 
-    const temp = tempfile(path.extname(url));
-
-    got
-      .stream(url)
-      .on("error", err => {
-        logError(`fetch random source failed, retry it!`);
-      })
-      .on("downloadProgress", progress => {
-        reportDownload({ ...progress, url });
-      })
-      .pipe(fs.createWriteStream(temp))
-      .on("finish", async () => {
-        await setWallpaper(temp, scale, url);
-      });
+    await setWallpaper(url, scale);
   });
 
 program
@@ -143,20 +112,7 @@ program
       return logError("fetch random source failed, retry it!");
     }
 
-    const temp = tempfile(path.extname(url));
-
-    got
-      .stream(url)
-      .on("error", err => {
-        logError(`fetch daily source failed, retry it!`);
-      })
-      .on("downloadProgress", progress => {
-        reportDownload({ ...progress, url });
-      })
-      .pipe(fs.createWriteStream(temp))
-      .on("finish", async () => {
-        await setWallpaper(temp, scale, url);
-      });
+    await setWallpaper(url, scale);
   });
 
 program
