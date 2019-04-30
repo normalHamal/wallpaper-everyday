@@ -46,7 +46,8 @@ program
         );
       }
 
-      await setWallpaper(file, scale);
+      await wallpaper.set(file, scale);
+      logSuccess("Wallpaper set Successful");
     }
   });
 
