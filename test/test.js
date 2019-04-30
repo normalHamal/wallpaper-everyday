@@ -9,7 +9,11 @@ let cacheBefore = "";
 const temp = path.join(__dirname, "./test_images/test3.jpg");
 
 test.before(async t => {
-  cacheBefore = await fs.readFile(_cache, "utf8");
+  try {
+    cacheBefore = await fs.readFile(_cache, "utf8");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 test.beforeEach(async t => {
@@ -19,7 +23,11 @@ test.beforeEach(async t => {
 });
 
 test.after(async t => {
-  await fs.writeFile(cacheBefore);
+  if (!!cacheBefore) {
+    await fs.writeFile(_cache, cacheBefore);
+  } else {
+    await fs.unlink(_cache);
+  }
 });
 
 test.serial("get", async t => {
