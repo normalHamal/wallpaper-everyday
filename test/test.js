@@ -12,7 +12,7 @@ test.before(async t => {
   try {
     cacheBefore = await fs.readFile(_cache, "utf8");
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 });
 

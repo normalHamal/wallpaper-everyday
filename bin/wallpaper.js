@@ -2,8 +2,6 @@
 
 const program = require("commander");
 const wallpaper = require("wallpaper");
-const fs = require("fs-extra");
-const path = require("path");
 const isUrl = require("is-url-superb");
 const {
   setWallpaper,
@@ -33,22 +31,7 @@ program
     "Scaling method: [auto, fill, fit, stretch, center](Default: auto) Only available on macOS"
   )
   .action(async (file, { scale }) => {
-    if (isUrl(file)) {
-      await setWallpaper(file, scale);
-    } else {
-      file = path.resolve(file);
-
-      // why here check file whether exist?
-      // Prevents invalid file paths from being written to the cache file
-      if (!fs.existsSync(file)) {
-        return console.log(
-          logError(`${colors.red.underline(file)} is not a valid path`)
-        );
-      }
-
-      await wallpaper.set(file, scale);
-      logSuccess("Wallpaper set Successful");
-    }
+    await setWallpaper(file, scale);
   });
 
 program
