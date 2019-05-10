@@ -8,7 +8,8 @@ const {
   switchWallpaper,
   logError,
   logSuccess,
-  clearWallpapers
+  clearWallpapers,
+  clearCurrentWallpaper
 } = require("../lib/util");
 const Unsplash = require("../lib/unsplash");
 const Bing = require("../lib/bing");
@@ -101,9 +102,14 @@ program
 
 program
   .command("clear")
-  .description("Clear all cached wallpaper.")
-  .action(async () => {
-    await clearWallpapers();
+  .description("Clear the currently used wallpaper")
+  .option("-a --all", "Clear all the cached wallpapers")
+  .action(async ({ all }) => {
+    if(all) {
+      await clearWallpapers();
+    } else {
+      await clearCurrentWallpaper();
+    }
   });
 
 program

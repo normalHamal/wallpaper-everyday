@@ -31,7 +31,7 @@ Commands:
   get                      Get desktop wallpaper real path
   random [options] <from>  Random desktop wallpaper change. from: [QJP, unsplash, bing]
   daily [options] <from>   Daily wallpaper. from: [bing, unsplash, netbian]
-  clear                    Clear all cached wallpaper.
+  clear [options]          Clear the currently used wallpaper
   switch [options]         Switch cached wallpapers
 
 Examples:
