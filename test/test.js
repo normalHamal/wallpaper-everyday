@@ -38,6 +38,50 @@ test.serial("get", async t => {
   t.true((await execa.stdout(bin, ["get"], { cwd: __dirname })).length > 0);
 });
 
+test.serial("switch", async t => {
+  const orignalImagePath = await execa.stdout(bin, ["get"], {
+    cwd: __dirname
+  });
+  const testImagsPaths = [
+    path.join(__dirname, "./test_images/test1.jpg"),
+    path.join(__dirname, "./test_images/test2.jpg")
+  ];
+
+  await execa.stdout(bin, ["update", testImagsPaths[0]], {
+    cwd: __dirname
+  });
+  await execa.stdout(bin, ["update", testImagsPaths[1]], {
+    cwd: __dirname
+  });
+
+  await execa.stdout(bin, ["switch", "-p"], {
+    cwd: __dirname
+  });
+  const preImagePath = await execa.stdout(bin, ["get"], {
+    cwd: __dirname
+  });
+  t.true(
+    preImagePath.includes(path.resolve(testImagsPaths[0])) &&
+      !preImagePath.includes(orignalImagePath)
+  );
+
+  await execa.stdout(bin, ["switch", "-n"], {
+    cwd: __dirname
+  });
+  const nextImagePath = await execa.stdout(bin, ["get"], {
+    cwd: __dirname
+  });
+  t.true(
+    nextImagePath.includes(path.resolve(testImagsPaths[1])) &&
+      !nextImagePath.includes(preImagePath)
+  );
+
+  await execa.stdout(bin, ["switch", "-l"], {
+    cwd: __dirname
+  });
+  t.is(await execa.stdout(bin, ["get"], { cwd: __dirname }), nextImagePath);
+});
+
 test.serial("update", async t => {
   const tempImagePath = path.join(__dirname, "./test_images/test1.jpg");
   const orignalImagePath = await execa.stdout(bin, ["get"], {
@@ -163,48 +207,4 @@ test.serial("random:netbian", async t => {
     randomImagePath.includes(os.tmpdir()) &&
       !randomImagePath.includes(orignalImagePath)
   );
-});
-
-test.serial("switch", async t => {
-  const orignalImagePath = await execa.stdout(bin, ["get"], {
-    cwd: __dirname
-  });
-  const testImagsPaths = [
-    path.join(__dirname, "./test_images/test1.jpg"),
-    path.join(__dirname, "./test_images/test2.jpg")
-  ];
-
-  await execa.stdout(bin, ["update", testImagsPaths[0]], {
-    cwd: __dirname
-  });
-  await execa.stdout(bin, ["update", testImagsPaths[1]], {
-    cwd: __dirname
-  });
-
-  await execa.stdout(bin, ["switch", "-p"], {
-    cwd: __dirname
-  });
-  const preImagePath = await execa.stdout(bin, ["get"], {
-    cwd: __dirname
-  });
-  t.true(
-    preImagePath.includes(path.resolve(testImagsPaths[0])) &&
-      !preImagePath.includes(orignalImagePath)
-  );
-
-  await execa.stdout(bin, ["switch", "-n"], {
-    cwd: __dirname
-  });
-  const nextImagePath = await execa.stdout(bin, ["get"], {
-    cwd: __dirname
-  });
-  t.true(
-    nextImagePath.includes(path.resolve(testImagsPaths[1])) &&
-      !nextImagePath.includes(preImagePath)
-  );
-
-  await execa.stdout(bin, ["switch", "-l"], {
-    cwd: __dirname
-  });
-  t.is(await execa.stdout(bin, ["get"], { cwd: __dirname }), nextImagePath);
 });
