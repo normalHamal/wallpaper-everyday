@@ -4,6 +4,7 @@ const os = require("os");
 const path = require("path");
 const fs = require("fs-extra");
 
+const bin = "../bin/wallpaper";
 const _cache = path.join(process.env.HOME, ".wallpaper", ".cache.json");
 let cacheBefore = "";
 const temp = path.join(__dirname, "./test_images/test3.jpg");
@@ -17,7 +18,7 @@ test.before(async t => {
 });
 
 test.beforeEach(async t => {
-  await execa.stdout("../bin/wallpaper.js", ["update", temp], {
+  await execa.stdout(bin, ["update", temp], {
     cwd: __dirname
   });
 });
@@ -25,29 +26,29 @@ test.beforeEach(async t => {
 test.after(async t => {
   if (!!cacheBefore) {
     await fs.writeFile(_cache, cacheBefore);
+    await execa.stdout(bin, ["switch", "-l"], {
+      cwd: __dirname
+    });
   } else {
     await fs.unlink(_cache);
   }
 });
 
 test.serial("get", async t => {
-  t.true(
-    (await execa.stdout("../bin/wallpaper.js", ["get"], { cwd: __dirname }))
-      .length > 0
-  );
+  t.true((await execa.stdout(bin, ["get"], { cwd: __dirname })).length > 0);
 });
 
 test.serial("update", async t => {
   const tempImagePath = path.join(__dirname, "./test_images/test1.jpg");
-  const orignalImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const orignalImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
 
-  await execa.stdout("../bin/wallpaper.js", ["update", tempImagePath], {
+  await execa.stdout(bin, ["update", tempImagePath], {
     cwd: __dirname
   });
 
-  const updateImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const updateImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
   t.true(
@@ -57,15 +58,15 @@ test.serial("update", async t => {
 });
 
 test.serial("daily:bing", async t => {
-  const orignalImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const orignalImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
 
-  await execa.stdout("../bin/wallpaper.js", ["daily", "bing"], {
+  await execa.stdout(bin, ["daily", "bing"], {
     cwd: __dirname
   });
 
-  const randomImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const randomImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
   t.true(
@@ -75,15 +76,15 @@ test.serial("daily:bing", async t => {
 });
 
 test.serial("daily:unsplash", async t => {
-  const orignalImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const orignalImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
 
-  await execa.stdout("../bin/wallpaper.js", ["daily", "unsplash"], {
+  await execa.stdout(bin, ["daily", "unsplash"], {
     cwd: __dirname
   });
 
-  const randomImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const randomImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
   t.true(
@@ -93,15 +94,15 @@ test.serial("daily:unsplash", async t => {
 });
 
 test.serial("random:QJP", async t => {
-  const orignalImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const orignalImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
 
-  await execa.stdout("../bin/wallpaper.js", ["random", "QJP"], {
+  await execa.stdout(bin, ["random", "QJP"], {
     cwd: __dirname
   });
 
-  const randomImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const randomImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
   t.true(
@@ -111,15 +112,15 @@ test.serial("random:QJP", async t => {
 });
 
 test.serial("random:unsplash", async t => {
-  const orignalImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const orignalImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
 
-  await execa.stdout("../bin/wallpaper.js", ["random", "unsplash"], {
+  await execa.stdout(bin, ["random", "unsplash"], {
     cwd: __dirname
   });
 
-  const randomImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const randomImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
   t.true(
@@ -129,15 +130,15 @@ test.serial("random:unsplash", async t => {
 });
 
 test.serial("random:bing", async t => {
-  const orignalImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const orignalImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
 
-  await execa.stdout("../bin/wallpaper.js", ["random", "bing"], {
+  await execa.stdout(bin, ["random", "bing"], {
     cwd: __dirname
   });
 
-  const randomImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const randomImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
   t.true(
@@ -147,15 +148,15 @@ test.serial("random:bing", async t => {
 });
 
 test.serial("random:netbian", async t => {
-  const orignalImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const orignalImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
 
-  await execa.stdout("../bin/wallpaper.js", ["random", "netbian"], {
+  await execa.stdout(bin, ["random", "netbian"], {
     cwd: __dirname
   });
 
-  const randomImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const randomImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
   t.true(
@@ -165,7 +166,7 @@ test.serial("random:netbian", async t => {
 });
 
 test.serial("switch", async t => {
-  const orignalImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const orignalImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
   const testImagsPaths = [
@@ -173,17 +174,17 @@ test.serial("switch", async t => {
     path.join(__dirname, "./test_images/test2.jpg")
   ];
 
-  await execa.stdout("../bin/wallpaper.js", ["update", testImagsPaths[0]], {
+  await execa.stdout(bin, ["update", testImagsPaths[0]], {
     cwd: __dirname
   });
-  await execa.stdout("../bin/wallpaper.js", ["update", testImagsPaths[1]], {
+  await execa.stdout(bin, ["update", testImagsPaths[1]], {
     cwd: __dirname
   });
 
-  await execa.stdout("../bin/wallpaper.js", ["switch", "-p"], {
+  await execa.stdout(bin, ["switch", "-p"], {
     cwd: __dirname
   });
-  const preImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const preImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
   t.true(
@@ -191,10 +192,10 @@ test.serial("switch", async t => {
       !preImagePath.includes(orignalImagePath)
   );
 
-  await execa.stdout("../bin/wallpaper.js", ["switch", "-n"], {
+  await execa.stdout(bin, ["switch", "-n"], {
     cwd: __dirname
   });
-  const nextImagePath = await execa.stdout("../bin/wallpaper.js", ["get"], {
+  const nextImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname
   });
   t.true(
@@ -202,11 +203,8 @@ test.serial("switch", async t => {
       !nextImagePath.includes(preImagePath)
   );
 
-  await execa.stdout("../bin/wallpaper.js", ["switch", "-l"], {
+  await execa.stdout(bin, ["switch", "-l"], {
     cwd: __dirname
   });
-  t.is(
-    await execa.stdout("../bin/wallpaper.js", ["get"], { cwd: __dirname }),
-    nextImagePath
-  );
+  t.is(await execa.stdout(bin, ["get"], { cwd: __dirname }), nextImagePath);
 });

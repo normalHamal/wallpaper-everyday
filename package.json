@@ -4,7 +4,8 @@
   "description": "Manage the desktop wallpaper",
   "scripts": {
     "test": "ava",
-    "prepublishOnly": "prettier --write ./**/*.js"
+    "prepublishOnly": "npm run format",
+    "format": "prettier --write ./**/*.js"
   },
   "bin": {
     "wallpaper": "bin/wallpaper.js"
