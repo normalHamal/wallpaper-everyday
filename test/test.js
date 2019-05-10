@@ -4,7 +4,7 @@ const os = require("os");
 const path = require("path");
 const fs = require("fs-extra");
 
-const bin = "../bin/wallpaper";
+const bin = "../bin/wallpaper.js";
 const _cache = path.join(process.env.HOME, ".wallpaper", ".cache.json");
 let cacheBefore = "";
 const temp = path.join(__dirname, "./test_images/test3.jpg");
