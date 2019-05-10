@@ -105,7 +105,7 @@ program
   .description("Clear the currently used wallpaper")
   .option("-a --all", "Clear all the cached wallpapers")
   .action(async ({ all }) => {
-    if(all) {
+    if (all) {
       await clearWallpapers();
     } else {
       await clearCurrentWallpaper();
