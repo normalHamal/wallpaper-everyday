@@ -137,24 +137,6 @@ test.serial("daily:unsplash", async t => {
   );
 });
 
-test.serial("random:QJP", async t => {
-  const orignalImagePath = await execa.stdout(bin, ["get"], {
-    cwd: __dirname
-  });
-
-  await execa.stdout(bin, ["random", "QJP"], {
-    cwd: __dirname
-  });
-
-  const randomImagePath = await execa.stdout(bin, ["get"], {
-    cwd: __dirname
-  });
-  t.true(
-    randomImagePath.includes(os.tmpdir()) &&
-      !randomImagePath.includes(orignalImagePath)
-  );
-});
-
 test.serial("random:unsplash", async t => {
   const orignalImagePath = await execa.stdout(bin, ["get"], {
     cwd: __dirname

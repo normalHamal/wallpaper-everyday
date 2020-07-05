@@ -13,12 +13,10 @@ const {
 } = require("../lib/util");
 const Unsplash = require("../lib/unsplash");
 const Bing = require("../lib/bing");
-const QJP = require("../lib/qvjunping");
 const NetBian = require("../lib/netbian");
 
 const { version } = require("../package.json");
 const bingApi = new Bing();
-const qjpApi = new QJP();
 const unsplashApi = new Unsplash();
 const netbianApi = new NetBian();
 
@@ -46,7 +44,7 @@ program
 
 program
   .command("random <from>")
-  .description("Random desktop wallpaper change. from: [QJP, unsplash, bing]")
+  .description("Random desktop wallpaper change. from: [unsplash, bing, netbian]")
   .option(
     "-s --scale [mode]",
     "Scaling method: [auto, fill, fit, stretch, center](Default: auto) Only available on macOS"
@@ -55,9 +53,7 @@ program
     let url = "";
     from = from.toUpperCase();
 
-    if (from === "QJP") {
-      url = await qjpApi.getRandom();
-    } else if (from === "UNSPLASH") {
+    if (from === "UNSPLASH") {
       url = await unsplashApi.getRandom();
     } else if (from === "BING") {
       url = await bingApi.getRandom();
@@ -76,7 +72,7 @@ program
 
 program
   .command("daily <from>")
-  .description("Daily wallpaper. from: [bing, unsplash, netbian]")
+  .description("Daily wallpaper. from: [bing, unsplash]")
   .option(
     "-s --scale [mode]",
     "Scaling method: [auto, fill, fit, stretch, center](Default: auto) Only available on macOS"
